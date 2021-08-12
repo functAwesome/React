@@ -37,18 +37,25 @@ export class Login extends React.Component<LoginProps, LoginState> {
 
     private async handleSubmit(event: SyntheticEvent) {
         event.preventDefault();
+        this.setState({loginAttempted:true})
         const result = await this.props.authService.login(
             this.state.userName,
             this.state.password
             )
             if (result){
-                console.log(result)
+                this.setState({loginSuccessfull:true})
             } else {
-                console.log('Wrong Login')
+                this.setState({loginSuccessfull:false})
             }
     }
 
     render(){
+        let loginMessage:any;
+        if(this.state.loginSuccessfull===true){
+            loginMessage = "You have successfully logged in."
+        } else if(this.state.loginAttempted === true){
+            loginMessage = "Incorrect Username or Password."
+        } else loginMessage = "";
         return(
             <div>
                 <h2>Please Login</h2>
@@ -57,6 +64,7 @@ export class Login extends React.Component<LoginProps, LoginState> {
                     <input value= {this.state.password} type='password' onChange= {e=> this.setPassword(e)} /> <br />
                     <input type="submit" value= "Login" />
                 </form>
+                {loginMessage}
             </div>
         )
     }
